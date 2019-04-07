@@ -45,3 +45,20 @@ describe('Configure Constructor', () => {
   });
 
 });
+
+describe('Regex Pattern', () => {
+
+    it('should capture all regex groups', () => {
+
+      let url = '/territory/rajax/:fragment/street/:street/:block';
+      let regex = /:([\w+]*)*/ig;
+      let match;
+      let params = [];
+      while( ( match = regex.exec(url) ) !== null  ){
+        params.push( match[1] );
+      }
+      expect(params).to.include('fragment', 'street', 'block');
+
+    });
+
+});
