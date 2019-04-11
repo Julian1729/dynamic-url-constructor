@@ -5,7 +5,7 @@ const {expect} = require('chai');
 
 const URLConstructor = require('../URLConstructor');
 
-describe('Configure Constructor', () => {
+describe('URL Constructor Methods', () => {
 
   var TestURLConstructor = null;
 
@@ -60,5 +60,20 @@ describe('Regex Pattern', () => {
       expect(params).to.include('fragment', 'street', 'block');
 
     });
+
+});
+
+describe('Private Methods', () => {
+
+  it('should render url', () => {
+
+    TestURLConstructor = new URLConstructor();
+    TestURLConstructor.setParam('street', 'Oakland');
+    TestURLConstructor.setParam('block', '4500');
+    let url = '/rajax/territory/street/:street/block/:block';
+    let renderedUrl = TestURLConstructor.renderURL(url);
+    expect(renderedUrl).to.equal('/rajax/territory/street/Oakland/block/4500');
+
+  });
 
 });
