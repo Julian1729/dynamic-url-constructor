@@ -86,8 +86,11 @@ function addRoute(name, url){
  */
 function getURL(name, params){
 
+  params = params || {};
   var route = this.routes[name] || null;
-  return route;
+  if(!route) throw new Error('No route with name ' + name);
+  var renderedURL = renderURL(route, this.params, params);
+  return renderedURL;
 
 };
 
@@ -101,8 +104,10 @@ function getURL(name, params){
  * @param  {String} url URL string to be parsed
  * @return {Object} Rendered url
  */
-function renderURL(url){
+function renderURL(url, ogParams, overrideParams){
 
+  overrideParams = overrideParams || {};
+  ogParams = ogParams || {};
   // param regex
   var regex = /:([\w+]*)*/ig;
   var match = null;
@@ -112,7 +117,7 @@ function renderURL(url){
     var exactMatch = match[0];
     // WARNING: if a param is not found,
     // it is defaulted to empty string
-    var value = this.params[name] || '';
+    var value = overrideParams[name] || ogParams[name] || '';
     // replace in url
     renderedURL = renderedURL.replace(exactMatch, value);
   }

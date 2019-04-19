@@ -44,6 +44,16 @@ describe('URL Constructor Methods', () => {
 
   });
 
+  it('should get rendered url', () => {
+
+    TestURLConstructor.setParam('street', 'Oakland');
+    TestURLConstructor.setParam('block', '4500');
+    TestURLConstructor.addRoute('territory', '/rajax/:street/:block');
+    var url = TestURLConstructor.getURL('territory');
+    expect(url).to.equal('/rajax/Oakland/4500');
+
+  });
+
 });
 
 describe('Regex Pattern', () => {
@@ -71,8 +81,19 @@ describe('Private Methods', () => {
     TestURLConstructor.setParam('street', 'Oakland');
     TestURLConstructor.setParam('block', '4500');
     let url = '/rajax/territory/street/:street/block/:block';
-    let renderedUrl = TestURLConstructor.renderURL(url);
+    let renderedUrl = TestURLConstructor.renderURL(url, TestURLConstructor.params, null);
     expect(renderedUrl).to.equal('/rajax/territory/street/Oakland/block/4500');
+
+  });
+
+  it('should render url w/ override params', () => {
+
+    TestURLConstructor = new URLConstructor();
+    TestURLConstructor.setParam('street', 'Oakland');
+    TestURLConstructor.setParam('block', '4500');
+    let url = '/rajax/territory/street/:street/block/:block';
+    let renderedUrl = TestURLConstructor.renderURL(url, TestURLConstructor.params, {street: 'Wakeling'});
+    expect(renderedUrl).to.equal('/rajax/territory/street/Wakeling/block/4500');
 
   });
 
