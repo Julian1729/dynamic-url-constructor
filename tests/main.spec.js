@@ -94,3 +94,51 @@ describe('Regex Pattern', () => {
     });
 
 });
+
+describe('Private Methods', () => {
+
+  var TestURLConstructor = null;
+
+  beforeEach(() => {
+
+    TestURLConstructor = new URLConstructor();
+
+  });
+
+  describe('renderURL', () => {
+
+    it('should render URL', () => {
+
+      let url = TestURLConstructor.renderURL('/this/url/should/have/query/param', {}, {}, {}, {});
+      expect(url).to.equal('/this/url/should/have/query/param');
+
+    });
+
+    it('should render URL w/ query params', () => {
+
+      let url = TestURLConstructor.renderURL('/this/url/should/have/query/param', {}, {}, {}, {queryParam: 'thisone'});
+      expect(url).to.equal('/this/url/should/have/query/param?queryParam=thisone');
+
+    });
+
+  });
+
+  describe('appendQueryParams', () => {
+
+    it('should append query params to string', () => {
+
+      let url = TestURLConstructor.appendQueryParams('this/url', {dnc: 'true', meta: 'true'})
+      expect(url).to.equal('this/url?dnc=true&meta=true')
+
+    });
+
+    it('should omit & in query string', () => {
+
+      let url = TestURLConstructor.appendQueryParams('this/url', {dnc: 'true'})
+      expect(url).to.equal('this/url?dnc=true')
+
+    });
+
+  });
+
+});

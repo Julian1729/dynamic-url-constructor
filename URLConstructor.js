@@ -37,6 +37,7 @@ URLConstructor.prototype = {
 if(process.env.NODE_ENV === 'testing'){
   // attach private methods to URLConstructor
   URLConstructor.prototype.renderURL = renderURL;
+  URLConstructor.prototype.appendQueryParams = appendQueryParams;
 }
 
 /**
@@ -164,6 +165,7 @@ function renderURL(url, routeParams, globalParams, overrideParams, queryParams){
   globalParams = globalParams || {};
   routeParams = routeParams || {};
   overrideParams = overrideParams || {};
+  queryParams = queryParams || {};
   // param extract regex
   var regex = /:([\w+]*)*/ig;
   var match = null;
@@ -177,7 +179,40 @@ function renderURL(url, routeParams, globalParams, overrideParams, queryParams){
     // replace in url
     renderedURL = renderedURL.replace(exactMatch, value);
   }
+
+  // check for query params
+  if(Object.keys(queryParams).length > 0){
+    renderedURL = appendQueryParams(renderedURL, queryParams);
+  }
+
   return renderedURL;
+
+}
+
+/**
+ * Format and append query parameters to url
+ * @param  {[type]} queryParams [description]
+ * @return {[type]}             [description]
+ */
+function appendQueryParams(url, queryParams){
+
+  var pairs = Object.entries(queryParams);
+
+  if(!pairs.length) return;
+
+  var queryString = '?';
+
+  for(var i=0; i<pairs.length; i++){
+
+    var key = pairs[i][0];
+    var value = pairs[i][1];
+    queryString += key + '=' + value;
+
+    if( (i+1) !== pairs.length) queryString += '&';
+
+  }
+
+  return url + queryString;
 
 }
 
