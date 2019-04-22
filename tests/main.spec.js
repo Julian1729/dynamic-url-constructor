@@ -24,32 +24,54 @@ describe('URL Constructor Methods', () => {
 
   it('should set param', () => {
 
-    TestURLConstructor.setParam('userId', '12345');
-    expect(TestURLConstructor.params.userId).to.equal('12345');
+    TestURLConstructor.setGlobal('userId', '12345');
+    expect(TestURLConstructor.globals.userId).to.equal('12345');
 
   });
 
   it('should add a route', () => {
 
-    TestURLConstructor.addRoute('territory', '/rajax/territory');
-    expect(TestURLConstructor.routes).to.exist;
+    let newRoute = TestURLConstructor.addRoute('territory', '/rajax/territory');
+    expect(newRoute).to.exist;
+    expect(newRoute.setParam).to.be.a('function');
 
   });
 
   it('should get a route', () => {
 
     TestURLConstructor.addRoute('territory', '/rajax/territory');
-    var url = TestURLConstructor.getURL('territory');
+    let route = TestURLConstructor.getRoute('territory');
+    let url = route.url();
     expect(url).to.equal('/rajax/territory');
 
   });
 
   it('should get rendered url', () => {
 
-    TestURLConstructor.setParam('street', 'Oakland');
-    TestURLConstructor.setParam('block', '4500');
-    TestURLConstructor.addRoute('territory', '/rajax/:street/:block');
-    var url = TestURLConstructor.getURL('territory');
+    let route = TestURLConstructor.addRoute('territory', '/rajax/:street/:block');
+    route.setParam('street', 'Oakland');
+    route.setParam('block', '4500');
+    let url = route.url();
+    expect(url).to.equal('/rajax/Oakland/4500');
+
+  });
+
+  it('should use override params in rendered url', () => {
+
+    let route = TestURLConstructor.addRoute('territory', '/rajax/:street/:block');
+    route.setParam('street', 'Oakland');
+    route.setParam('block', '4500');
+    let url = route.url({street: 'Wakeling'});
+    expect(url).to.equal('/rajax/Wakeling/4500');
+
+  });
+
+  it('should use global params in rendered url', () => {
+
+    TestURLConstructor.setGlobal('street', 'Oakland');
+    TestURLConstructor.setGlobal('block', '4500');
+    let route = TestURLConstructor.addRoute('territory', '/rajax/:street/:block');
+    let url = route.url();
     expect(url).to.equal('/rajax/Oakland/4500');
 
   });
@@ -70,31 +92,5 @@ describe('Regex Pattern', () => {
       expect(params).to.include('fragment', 'street', 'block');
 
     });
-
-});
-
-describe('Private Methods', () => {
-
-  it('should render url', () => {
-
-    TestURLConstructor = new URLConstructor();
-    TestURLConstructor.setParam('street', 'Oakland');
-    TestURLConstructor.setParam('block', '4500');
-    let url = '/rajax/territory/street/:street/block/:block';
-    let renderedUrl = TestURLConstructor.renderURL(url, TestURLConstructor.params, null);
-    expect(renderedUrl).to.equal('/rajax/territory/street/Oakland/block/4500');
-
-  });
-
-  it('should render url w/ override params', () => {
-
-    TestURLConstructor = new URLConstructor();
-    TestURLConstructor.setParam('street', 'Oakland');
-    TestURLConstructor.setParam('block', '4500');
-    let url = '/rajax/territory/street/:street/block/:block';
-    let renderedUrl = TestURLConstructor.renderURL(url, TestURLConstructor.params, {street: 'Wakeling'});
-    expect(renderedUrl).to.equal('/rajax/territory/street/Wakeling/block/4500');
-
-  });
 
 });

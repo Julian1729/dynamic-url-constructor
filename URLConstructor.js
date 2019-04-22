@@ -8,11 +8,11 @@ var URLConstructor = function(){
 
 };
 
-URLConstructor.init = function(){
+URLConstructor.init = function(base){
 
-  this.base = '',
+  this.base = base || '',
 
-  this.params = {};
+  this.globals = {};
 
   this.routes = {};
 
@@ -20,15 +20,13 @@ URLConstructor.init = function(){
 
 URLConstructor.prototype = {
 
-  routes: {},
-
-  setParam: setParam,
+  setGlobal: setGlobal,
 
   setBase: setBase,
 
   addRoute: addRoute,
 
-  getURL: getURL
+  getRoute: getRoute
 
 };
 
@@ -40,6 +38,42 @@ if(process.env.NODE_ENV === 'testing'){
   // attach private methods to URLConstructor
   URLConstructor.prototype.renderURL = renderURL;
 }
+
+/**
+ * Route object
+ * @param  {String} url URL to be rendered
+ * @param {Object} parent Reference to parent URL Constructor
+ * @return {Route} The newly constructed Route
+ */
+URLConstructor.Route = function(urlString, parent){
+
+  /**
+   * Reference to global parameters
+   * @type {Object}
+   */
+  this.parent = parent;
+
+  /**
+   * URL to be rendered
+   * @type {String}
+   */
+  this.urlString = urlString;
+
+  /**
+   * Route Params
+   * @type {Object}
+   */
+  this.params = {};
+
+};
+
+URLConstructor.Route.prototype = {
+
+  setParam: setParam,
+
+  url: url
+
+};
 
 URLConstructor.init.prototype = URLConstructor.prototype;
 
@@ -66,13 +100,36 @@ function setBase(base){
 }
 
 /**
- * Add route to
- * @param {[type]} name [description]
- * @param {[type]} url  [description]
+ * Set global parameter
+ * @param {String} key   Key
+ * @param {String} value Value
  */
-function addRoute(name, url){
+function setGlobal(key, value){
 
-  this.routes[name] = url;
+  this.globals[key] = value;
+
+}
+
+/**
+ * Add and return new Route to URLConstructor
+ * @param {String} name Route identifier
+ * @param {String} url  Route URL
+ */
+function addRoute(name, urlString){
+
+  this.routes[name] = new URLConstructor.Route(urlString, this);
+  return this.routes[name];
+
+}
+
+/**
+ * Get route from parent object
+ * @param  {String} name Route identifier
+ * @return {Route}      Route object or null if doesnt exist
+ */
+function getRoute(name){
+
+  return this.routes[name] || null;
 
 }
 
@@ -84,13 +141,10 @@ function addRoute(name, url){
  * @param  {[type]} params Params to include or override
  * @return {[type]}        [description]
  */
-function getURL(name, params){
+function url(overrideParams){
 
-  params = params || {};
-  var route = this.routes[name] || null;
-  if(!route) throw new Error('No route with name ' + name);
-  var renderedURL = renderURL(route, this.params, params);
-  return renderedURL;
+  overrideParams = overrideParams || {};
+  return renderURL( (this.urlString || null), this.params,  this.parent.globals, overrideParams);
 
 };
 
@@ -102,13 +156,15 @@ function getURL(name, params){
  * Extract needed parameters from URL and inject
  * into url
  * @param  {String} url URL string to be parsed
+ * @param {String} globalParams global
  * @return {Object} Rendered url
  */
-function renderURL(url, ogParams, overrideParams){
+function renderURL(url, routeParams, globalParams, overrideParams, queryParams){
 
+  globalParams = globalParams || {};
+  routeParams = routeParams || {};
   overrideParams = overrideParams || {};
-  ogParams = ogParams || {};
-  // param regex
+  // param extract regex
   var regex = /:([\w+]*)*/ig;
   var match = null;
   var renderedURL = url;
@@ -117,7 +173,7 @@ function renderURL(url, ogParams, overrideParams){
     var exactMatch = match[0];
     // WARNING: if a param is not found,
     // it is defaulted to empty string
-    var value = overrideParams[name] || ogParams[name] || '';
+    var value = overrideParams[name] || routeParams[name] || globalParams[name] || '';
     // replace in url
     renderedURL = renderedURL.replace(exactMatch, value);
   }
