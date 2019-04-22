@@ -206,6 +206,7 @@ function appendQueryParams(url, queryParams){
 
     var key = pairs[i][0];
     var value = pairs[i][1];
+    value = encodeURIComponent(value);
     queryString += key + '=' + value;
 
     if( (i+1) !== pairs.length) queryString += '&';
