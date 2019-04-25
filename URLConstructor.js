@@ -2,9 +2,9 @@
  * URLConstructor
  */
 
-var URLConstructor = function(){
+var URLConstructor = function(base){
 
-  return new URLConstructor.init();
+  return new URLConstructor.init(base);
 
 };
 
@@ -142,10 +142,10 @@ function getRoute(name){
  * @param  {[type]} params Params to include or override
  * @return {[type]}        [description]
  */
-function url(overrideParams){
+function url(overrideParams, queryParams){
 
   overrideParams = overrideParams || {};
-  return renderURL( (this.urlString || null), this.params,  this.parent.globals, overrideParams);
+  return renderURL( (this.urlString || null), this.params,  this.parent.globals, overrideParams, queryParams, this.parent.base);
 
 };
 
@@ -160,7 +160,7 @@ function url(overrideParams){
  * @param {String} globalParams global
  * @return {Object} Rendered url
  */
-function renderURL(url, routeParams, globalParams, overrideParams, queryParams){
+function renderURL(url, routeParams, globalParams, overrideParams, queryParams, base){
 
   globalParams = globalParams || {};
   routeParams = routeParams || {};
@@ -184,6 +184,9 @@ function renderURL(url, routeParams, globalParams, overrideParams, queryParams){
   if(Object.keys(queryParams).length > 0){
     renderedURL = appendQueryParams(renderedURL, queryParams);
   }
+
+  // prefix with base
+  renderedURL = base + renderedURL;
 
   return renderedURL;
 

@@ -76,6 +76,37 @@ describe('URL Constructor Methods', () => {
 
   });
 
+  it('should include base in renderURL', () => {
+
+    TestURLConstructor.setGlobal('street', 'Oakland');
+    TestURLConstructor.setGlobal('block', '4500');
+    TestURLConstructor.setBase('http://www.paulandbarnabas.com');
+    let route = TestURLConstructor.addRoute('territory', '/rajax/:street/:block');
+    let url = route.url();
+    expect(url).to.equal('http://www.paulandbarnabas.com/rajax/Oakland/4500');
+
+  });
+
+  it('should render with query params', () => {
+
+    TestURLConstructor.setBase('http://www.paulandbarnabas.com')
+    let route = TestURLConstructor.addRoute('tester', '/unit?number=:number');
+    route.setParam('number', '4500');
+    let url = route.url();
+    expect(url).to.equal('http://www.paulandbarnabas.com/unit?number=4500');
+
+  });
+
+  it('should append existing query string', () => {
+
+    TestURLConstructor.setBase('http://www.paulandbarnabas.com')
+    let route = TestURLConstructor.addRoute('tester', '/unit?number=:number');
+    route.setParam('number', '4500');
+    let url = route.url();
+    expect(url).to.equal('http://www.paulandbarnabas.com/unit?number=4500');
+
+  });
+
 });
 
 describe('Regex Pattern', () => {
@@ -109,14 +140,14 @@ describe('Private Methods', () => {
 
     it('should render URL', () => {
 
-      let url = TestURLConstructor.renderURL('/this/url/should/have/query/param', {}, {}, {}, {});
+      let url = TestURLConstructor.renderURL('/this/url/should/have/query/param', {}, {}, {}, {}, '');
       expect(url).to.equal('/this/url/should/have/query/param');
 
     });
 
     it('should render URL w/ query params', () => {
 
-      let url = TestURLConstructor.renderURL('/this/url/should/have/query/param', {}, {}, {}, {queryParam: 'thisone'});
+      let url = TestURLConstructor.renderURL('/this/url/should/have/query/param', {}, {}, {}, {queryParam: 'thisone'}, '');
       expect(url).to.equal('/this/url/should/have/query/param?queryParam=thisone');
 
     });
