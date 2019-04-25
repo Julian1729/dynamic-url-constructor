@@ -170,6 +170,31 @@ describe('Private Methods', () => {
 
     });
 
+    it('should append to query string', () => {
+
+      let url = TestURLConstructor.appendQueryParams('this/url?param1=true', {param2: 'true', param3: 'true'})
+      expect(url).to.equal('this/url?param1=true&param2=true&param3=true');
+
+    });
+
+  });
+
+  describe('hasQueryString', () => {
+
+    it('should detect a query string', () => {
+
+      let url = 'http://paulandbarnabas.com/rajax/meta?queryString=true';
+      expect(TestURLConstructor.hasQueryString(url)).to.be.true;
+
+    });
+
+    it('should detect a query string', () => {
+
+      let url = 'http://paulandbarnabas.com/rajax/meta';
+      expect(TestURLConstructor.hasQueryString(url)).to.be.false;
+
+    });
+
   });
 
 });

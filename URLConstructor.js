@@ -1,6 +1,7 @@
 /**
  * URLConstructor
  */
+var CONSTANTS = require('./constants.js');
 
 var URLConstructor = function(base){
 
@@ -38,6 +39,7 @@ if(process.env.NODE_ENV === 'testing'){
   // attach private methods to URLConstructor
   URLConstructor.prototype.renderURL = renderURL;
   URLConstructor.prototype.appendQueryParams = appendQueryParams;
+  URLConstructor.prototype.hasQueryString = hasQueryString;
 }
 
 /**
@@ -167,10 +169,9 @@ function renderURL(url, routeParams, globalParams, overrideParams, queryParams, 
   overrideParams = overrideParams || {};
   queryParams = queryParams || {};
   // param extract regex
-  var regex = /:([\w+]*)*/ig;
   var match = null;
   var renderedURL = url;
-  while( ( match = regex.exec(url) ) !== null  ){
+  while( ( match = CONSTANTS.REGEX.FIND_PARAM.exec(url) ) !== null  ){
     var name = match[1];
     var exactMatch = match[0];
     // WARNING: if a param is not found,
@@ -193,6 +194,18 @@ function renderURL(url, routeParams, globalParams, overrideParams, queryParams, 
 }
 
 /**
+ * Detect whether a URL string contains a
+ * query string, and return query string.
+ * @param  {String}  url Query string
+ * @return {Boolean} True if has string
+ */
+function hasQueryString(url){
+
+  return url.match(CONSTANTS.REGEX.DETECT_QUERY_STRING) ? true : false;
+
+}
+
+/**
  * Format and append query parameters to url
  * @param  {[type]} queryParams [description]
  * @return {[type]}             [description]
@@ -203,7 +216,13 @@ function appendQueryParams(url, queryParams){
 
   if(!pairs.length) return;
 
-  var queryString = '?';
+  var queryString = '';
+  // discern whether a query string exists
+  if( hasQueryString(url) ){
+    queryString = '&';
+  }else{
+    queryString = '?';
+  }
 
   for(var i=0; i<pairs.length; i++){
 
