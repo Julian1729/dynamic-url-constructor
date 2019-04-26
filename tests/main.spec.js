@@ -107,6 +107,16 @@ describe('URL Constructor Methods', () => {
 
   });
 
+  it('should get url wo/ double slashes', () => {
+
+    TestURLConstructor.setBase('http://www.paulandbarnabas.com/')
+    let route = TestURLConstructor.addRoute('tester', '/unit?number=:number');
+    route.setParam('number', '4500');
+    let url = route.url();
+    expect(url).to.equal('http://www.paulandbarnabas.com/unit?number=4500');
+
+  });
+
 });
 
 describe('Regex Pattern', () => {

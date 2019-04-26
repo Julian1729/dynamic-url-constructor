@@ -1,2 +1,4 @@
 - use regex to assure that there is a slash between base and url body
 - option to set params w/ object
+- add protocol prefix to url through class configuration object
+- in config add or remove trailing "/"

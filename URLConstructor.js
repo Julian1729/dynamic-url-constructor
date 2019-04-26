@@ -168,6 +168,7 @@ function renderURL(url, routeParams, globalParams, overrideParams, queryParams, 
   routeParams = routeParams || {};
   overrideParams = overrideParams || {};
   queryParams = queryParams || {};
+  base = base || '';
   // param extract regex
   var match = null;
   var renderedURL = url;
@@ -184,6 +185,16 @@ function renderURL(url, routeParams, globalParams, overrideParams, queryParams, 
   // check for query params
   if(Object.keys(queryParams).length > 0){
     renderedURL = appendQueryParams(renderedURL, queryParams);
+  }
+
+  // remove trailing slash from base if exists
+  if(base[base.length - 1] === '/'){
+    base = base.slice(0, -1);
+  }
+
+  // add leading slash if doesn't exist
+  if(renderedURL[0] !== '/'){
+    renderedURL = '/' + renderedURL;
   }
 
   // prefix with base
