@@ -1,5 +1,5 @@
 {
-  "name": "url-constructor",
+  "name": "dynamic-url-constructor",
   "version": "1.0.0",
   "description": "Construct dynamic URL strings",
   "main": "urlconstructor.js",
