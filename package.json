@@ -1,6 +1,6 @@
 {
   "name": "dynamic-url-constructor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Construct dynamic URL strings",
   "main": "urlconstructor.js",
   "directories": {
