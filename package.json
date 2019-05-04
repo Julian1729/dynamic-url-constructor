@@ -1,5 +1,5 @@
 {
-  "name": "urlconstructor",
+  "name": "url-constructor",
   "version": "1.0.0",
   "description": "Construct dynamic URL strings",
   "main": "urlconstructor.js",
@@ -14,7 +14,10 @@
   "keywords": [
     "url",
     "constructor",
-    "uri"
+    "uri",
+    "dynamic url",
+    "url constructor",
+    "url builder"
   ],
   "devDependencies": {
     "chai": "^4.2.0",
