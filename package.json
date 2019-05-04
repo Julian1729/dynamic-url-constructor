@@ -1,7 +1,7 @@
 {
   "name": "urlconstructor",
   "version": "1.0.0",
-  "description": "",
+  "description": "Construct dynamic URL strings",
   "main": "urlconstructor.js",
   "directories": {
     "test": "tests"
@@ -9,11 +9,13 @@
   "scripts": {
     "test": "export NODE_ENV=testing && mocha ./tests/*.spec.js"
   },
-  "author": "",
+  "author": "Julian Hernandez",
   "license": "ISC",
-  "dependencies": {
-    "lodash": "^4.17.11"
-  },
+  "keywords": [
+    "url",
+    "constructor",
+    "uri"
+  ],
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.0.2"
