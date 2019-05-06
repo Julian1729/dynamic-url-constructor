@@ -35,7 +35,7 @@ AppUrlConstructor.setGlobal('username', 'michaelscott');
 Render URL
 ```javascript
 let dashboardRoute = AppUrlConstructor.getRoute('dashboard');
-dashboard.url(); // http://example.com/michaelscott/dashboard
+dashboardRoute.url(); // http://example.com/michaelscott/dashboard
 ```
 
 Inject route specific params
