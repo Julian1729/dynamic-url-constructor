@@ -2,27 +2,33 @@
  * Export Routes
  */
 
-const URLConstructor = require('../urlconstructor');
+const URLConstructor = require("../src/URLConstructor");
 
 let ExampleURLConstructor = new URLConstructor();
 
 // Configure Constructor
-ExampleURLConstructor.setBase('http://examplesite.org');
+ExampleURLConstructor.setBase("http://examplesite.org");
 
 /**
  * Define Routes
  */
 
 // Dashboard Route
-let dashboard = ExampleURLConstructor.addRoute('home', '/:username/dashboard');
+let dashboard = ExampleURLConstructor.addRoute("home", "/:username/dashboard");
 
 // Account Settings Route
-let settings = ExampleURLConstructor.addRoute('account-settings', '/:username/settings');
+let settings = ExampleURLConstructor.addRoute(
+  "account-settings",
+  "/:username/settings"
+);
 
 // Age Calculator
-let ageCalculator = ExampleURLConstructor.addRoute('age-Calculator', '/age-calculator/:dob');
+let ageCalculator = ExampleURLConstructor.addRoute(
+  "age-Calculator",
+  "/age-calculator/:dob"
+);
 
 // Logout Route
-let logout = ExampleURLConstructor.addRoute('logout', '/?logout=1');
+let logout = ExampleURLConstructor.addRoute("logout", "/?logout=1");
 
-module.exports = {dashboard, settings, ageCalculator, logout};
+module.exports = { dashboard, settings, ageCalculator, logout };

@@ -2,12 +2,14 @@
   "name": "dynamic-url-constructor",
   "version": "1.0.5",
   "description": "Construct dynamic URL strings",
-  "main": "URLConstructor.js",
+  "main": "dist/index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "export NODE_ENV=testing && mocha ./tests/*.spec.js"
+    "start": "npx babel src --watch --out-dir dist",
+    "test": "export NODE_ENV=testing && mocha ./tests/*.spec.js",
+    "build": "npx babel src --out-dir dist"
   },
   "author": "Julian Hernandez",
   "license": "ISC",
@@ -20,7 +22,11 @@
     "url builder"
   ],
   "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
     "chai": "^4.2.0",
-    "mocha": "^6.0.2"
+    "mocha": "^6.0.2",
+    "rewire": "^5.0.0"
   }
 }
